@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-01-31 20:08:37
+" Last Modified: 2018-01-31 20:49:44
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -129,10 +129,7 @@ function! s:surroundNdel()
     let b:curcol = col(".")
     let b:curline = line(".")
     " check is can be deleted
-    if s:isBrackets(pat) ==# 0
-        return
-    endif
-    if s:isInSurround(pat) ==# 0
+    if s:isBrackets(pat) ==# 0 || s:isInSurround(pat) ==# 0
         return
     endif
     " delete
@@ -152,13 +149,7 @@ function! s:surroundNrep()
     let b:curcol = col(".")
     let b:curline = line(".")
     " check is can be deleted
-    if s:isBrackets(pat1) ==# 0
-        return
-    endif
-    if s:isBrackets(pat2) ==# 0
-        return
-    endif
-    if s:isInSurround(pat1) ==# 0
+    if s:isBrackets(pat1) ==# 0 || s:isBrackets(pat2) ==# 0 || s:isInSurround(pat1) ==# 0
         return
     endif
     " replace
