@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-01-31 19:39:35
+" Last Modified: 2018-01-31 20:08:37
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -11,11 +11,6 @@ endfunction
 
 
 function! s:isBrackets(pat)
-    " for c in s:patlist
-        " if a:pat ==# c
-            " return 1
-        " endif
-    " endfor
     if has_key(s:patmap, a:pat)
         return 1
     endif
@@ -29,7 +24,8 @@ endfunction
 
 function! s:isInSurround(pat)
     let nofound = 0
-    let s:nowcol = col(".")
+    let b:curcol = col(".")
+    let b:curline = line(".")
     execute "normal F".a:pat
     if matchstr(getline('.'), '\%' . col('.') . 'c.') !=# a:pat
         " Ref: https://stackoverflow.com/questions/23323747/vim-vimscript-get-exact-character-under-the-cursor
@@ -41,22 +37,22 @@ function! s:isInSurround(pat)
         let nofound = 1
     endif
     let rightcol=col(".")
-    if nofound ==# 0 && leftcol <= s:nowcol && rightcol >= s:nowcol && leftcol !=# rightcol
+    if nofound ==# 0 && leftcol <= b:curcol && rightcol >= b:curcol && leftcol !=# rightcol
         return 1
+    else
+        redraw
+        echohl WarningMsg
+            echo "   ❖  沒有在".a:pat.s:getBracketsMap(a:pat)."裡喔 ❖ "
+        echohl NONE
     endif
-    redraw
-    echohl WarningMsg
-        echo "   ❖  沒有在".a:pat.s:getBracketsMap(a:pat)."裡喔 ❖ "
-    echohl NONE
     " recover sorcur position
-    execute "normal 0".(s:nowcol)."lh"
+    call cursor(b:curline, b:curcol)
     return 0
 endfunction
 
 
 function! s:saveMap(pat)
     let s:save=maparg(a:pat, 'i')
-    " exec 'iunmap ' . a:pat if there is no map it will be error
     execute 'inoremap ' . a:pat . ' ' . a:pat
 endfunction
 
