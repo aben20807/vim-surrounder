@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-01-31 20:49:44
+" Last Modified: 2018-01-31 20:58:09
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -92,9 +92,6 @@ endfunction
 
 function! s:surroundVadd(vmode)
     " Ref: https://stackoverflow.com/questions/29091614/vim-determine-if-function-called-from-visual-block-mode
-    " FIXME v 模式多行最後會多一個字元
-    " FIXME V 模式往上選會把上面當成尾端
-    " FIXME v 模式往前選會括錯
     let pat = nr2char(getchar())
     let b:curcol = col(".")
     let b:curline = line(".")
@@ -105,11 +102,11 @@ function! s:surroundVadd(vmode)
     let b:curcol = col(".")
     call s:saveMap(pat)
     if a:vmode ==# 'v'
-        execute "normal gvO\<ESC> hi".pat
-        execute "normal gvO\<ESC> a".s:getBracketsMap(pat)."\<ESC>"
+        execute "normal! `>a".s:getBracketsMap(pat)
+        execute "normal! `<i".pat
     elseif a:vmode ==# 'V'
-        execute "normal gvO\<ESC> I".pat
-        execute "normal gvO\<ESC> A".s:getBracketsMap(pat)."\<ESC>"
+        execute "normal! `>a".s:getBracketsMap(pat)
+        execute "normal! `<i".pat
     else
         execute "normal gvOI".pat
         execute "normal gvlOlA".s:getBracketsMap(pat)."\<ESC>"
