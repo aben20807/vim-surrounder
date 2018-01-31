@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-01-31 20:34:30
+" Last Modified: 2018-01-31 20:08:37
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -67,6 +67,8 @@ function! s:surround(num, pat)
     if s:isBrackets(a:pat) ==# 0
         return
     endif
+    let b:curcol = col(".")
+    let b:curline = line(".")
     call s:saveMap(a:pat)
     execute "normal viw\<ESC> bi".a:pat
     for i in range(a:num)
@@ -78,6 +80,7 @@ function! s:surround(num, pat)
     echohl WarningMsg
         echo "   ❖  加入".a:pat.s:getBracketsMap(a:pat)." ❖ "
     echohl NONE
+    call cursor(b:curline, b:curcol + 1)
 endfunction
 
 
@@ -93,6 +96,8 @@ function! s:surroundVadd(vmode)
     " FIXME V 模式往上選會把上面當成尾端
     " FIXME v 模式往前選會括錯
     let pat = nr2char(getchar())
+    let b:curcol = col(".")
+    let b:curline = line(".")
     " check is can be added
     if s:isBrackets(pat) ==# 0
         return
@@ -115,12 +120,14 @@ function! s:surroundVadd(vmode)
         echo "   ❖  加入".pat.s:getBracketsMap(pat)." ❖ "
     echohl NONE
     " recover sorcur position
-    execute "normal 0".(b:curcol)."lhf".pat
+    call cursor(b:curline, b:curcol + 1)
 endfunction
 
 
 function! s:surroundNdel()
     let pat = nr2char(getchar())
+    let b:curcol = col(".")
+    let b:curline = line(".")
     " check is can be deleted
     if s:isBrackets(pat) ==# 0
         return
@@ -128,22 +135,22 @@ function! s:surroundNdel()
     if s:isInSurround(pat) ==# 0
         return
     endif
-    let b:curcol = col(".")
     " delete
     execute "normal F".pat."xf".s:getBracketsMap(pat)."x"
-    " recover sorcur position
-    execute "normal 0".(b:curcol)."lhh"
     redraw
     echohl WarningMsg
-       "  echo b:curcol." ".leftcol." ".rightcol
         echo "   ❖  刪除".pat.s:getBracketsMap(pat)." ❖ "
     echohl NONE
+    " recover sorcur position
+    call cursor(b:curline, b:curcol - 1)
 endfunction
 
 
 function! s:surroundNrep()
     let pat1 = nr2char(getchar())
     let pat2 = nr2char(getchar())
+    let b:curcol = col(".")
+    let b:curline = line(".")
     " check is can be deleted
     if s:isBrackets(pat1) ==# 0
         return
@@ -156,12 +163,12 @@ function! s:surroundNrep()
     endif
     " replace
     execute "normal F".pat1."r".pat2."f".s:getBracketsMap(pat1)."r".s:getBracketsMap(pat2)
-    " recover sorcur position
-    execute "normal 0".(b:curcol)."lh"
+    redraw
     echohl WarningMsg
-       "  echo b:curcol." ".leftcol." ".rightcol
         echo "   ❖  取代".pat1.s:getBracketsMap(pat1)."為".pat2.s:getBracketsMap(pat2)." ❖ "
     echohl NONE
+    " recover sorcur position
+    call cursor(b:curline, b:curcol)
 endfunction
 
 
