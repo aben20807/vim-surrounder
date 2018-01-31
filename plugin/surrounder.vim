@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-01-31 20:08:37
+" Last Modified: 2018-01-31 20:22:13
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -97,7 +97,7 @@ function! s:surroundVadd(vmode)
     if s:isBrackets(pat) ==# 0
         return
     endif
-    let s:nowcol = col(".")
+    let b:curcol = col(".")
     call s:saveMap(pat)
     if a:vmode ==# 'v'
         execute "normal gvO\<ESC> hi".pat
@@ -115,7 +115,7 @@ function! s:surroundVadd(vmode)
         echo "   ❖  加入".pat.s:getBracketsMap(pat)." ❖ "
     echohl NONE
     " recover sorcur position
-    execute "normal 0".(s:nowcol)."lhf".pat
+    execute "normal 0".(b:curcol)."lhf".pat
 endfunction
 
 
@@ -128,13 +128,14 @@ function! s:surroundNdel()
     if s:isInSurround(pat) ==# 0
         return
     endif
+    let b:curcol = col(".")
     " delete
     execute "normal F".pat."xf".s:getBracketsMap(pat)."x"
     " recover sorcur position
-    execute "normal 0".(s:nowcol)."lhh"
+    execute "normal 0".(b:curcol)."lhh"
     redraw
     echohl WarningMsg
-       "  echo s:nowcol." ".leftcol." ".rightcol
+       "  echo b:curcol." ".leftcol." ".rightcol
         echo "   ❖  刪除".pat.s:getBracketsMap(pat)." ❖ "
     echohl NONE
 endfunction
@@ -156,22 +157,55 @@ function! s:surroundNrep()
     " replace
     execute "normal F".pat1."r".pat2."f".s:getBracketsMap(pat1)."r".s:getBracketsMap(pat2)
     " recover sorcur position
-    execute "normal 0".(s:nowcol)."lh"
+    execute "normal 0".(b:curcol)."lh"
     echohl WarningMsg
-       "  echo s:nowcol." ".leftcol." ".rightcol
+       "  echo b:curcol." ".leftcol." ".rightcol
         echo "   ❖  取代".pat1.s:getBracketsMap(pat1)."為".pat2.s:getBracketsMap(pat2)." ❖ "
     echohl NONE
 endfunction
 
 
 command! -nargs=+ S call s:surround(<f-args>)
-nnoremap <silent> <Plug>SurroundNadd :<C-u>call <SID>surroundNadd(v:count1)<CR>
-vnoremap <silent> <Plug>SurroundVadd :<C-u>call <SID>surroundVadd(visualmode())<CR>
-nmap <leader>s <Plug>SurroundNadd
-vmap <leader>s <Plug>SurroundVadd
+" nnoremap <silent> <Plug>SurroundNadd :<C-u>call <SID>surroundNadd(v:count1)<CR>
+" vnoremap <silent> <Plug>SurroundVadd :<C-u>call <SID>surroundVadd(visualmode())<CR>
+" nmap <leader>s <Plug>SurroundNadd
+" vmap <leader>s <Plug>SurroundVadd
+"
+" nnoremap <silent> <Plug>SurroundNdel :<C-u>call <SID>surroundNdel()<CR>
+" nmap <leader>d <Plug>SurroundNdel
+"
+" nnoremap <silent> <Plug>SurroundNrep :<C-u>call <SID>surroundNrep()<CR>
+" nmap <leader>f <Plug>SurroundNrep
+" Function: s:initVariable() function
+" 初始化變數
+" Ref: https://github.com/scrooloose/nerdcommenter/blob/master/plugin/NERD_commenter.vim#L26
+" Args:
+"   -var: the name of the var to be initialised
+"   -value: the value to initialise var to
+"
+" Returns:
+"   1 if the var is set, 0 otherwise
+function! s:initVariable(var, value)
+    if !exists(a:var)
+        execute 'let ' . a:var . ' = ' . "'" . a:value . "'"
+        return 1
+    endif
+    return 0
+endfunction
 
-nnoremap <silent> <Plug>SurroundNdel :<C-u>call <SID>surroundNdel()<CR>
-nmap <leader>d <Plug>SurroundNdel
 
-nnoremap <silent> <Plug>SurroundNrep :<C-u>call <SID>surroundNrep()<CR>
-nmap <leader>f <Plug>SurroundNrep
+" Section: variable initialization
+call s:initVariable("g:surrounder_n_add_key", "<leader>s")
+call s:initVariable("g:surrounder_v_add_key", "<leader>s")
+call s:initVariable("g:surrounder_n_del_key", "<leader>d")
+call s:initVariable("g:surrounder_n_rep_key", "<leader>f")
+
+
+" Section: key map設定
+function! s:setUpKeyMap()
+    execute "nnoremap <silent> ".g:surrounder_n_add_key." :<C-u>call <SID>surroundNadd(v:count1)<CR>"
+    execute "vnoremap <silent> ".g:surrounder_v_add_key." :<C-u>call <SID>surroundVadd(visualmode())<CR>"
+    execute "nnoremap <silent> ".g:surrounder_n_del_key." :<C-u>call <SID>surroundNdel()<CR>"
+    execute "nnoremap <silent> ".g:surrounder_n_rep_key." :<C-u>call <SID>surroundNrep()<CR>"
+endfunction
+call s:setUpKeyMap()
