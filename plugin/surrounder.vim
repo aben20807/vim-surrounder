@@ -1,33 +1,24 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
-" Filename: surround.vim
-" Last Modified: 2018-01-24 18:25:01
+" Filename: surrounder.vim
+" Last Modified: 2018-01-31 19:39:35
 " Vim: enc=utf-8
 
-let s:patlist=["'", '"', '(', '[', '{', '<']
+let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
 
-function! s:mapBrackets(pat)
-    if a:pat ==# "'"
-        return "'"
-    elseif a:pat ==# '"'
-        return '"'
-    elseif a:pat ==# '{'
-        return '}'
-    elseif a:pat ==# '['
-        return ']'
-    elseif a:pat ==# '('
-        return ')'
-    elseif a:pat ==# '<'
-        return '>'
-    endif
+function! s:getBracketsMap(pat)
+    return s:patmap[a:pat]
 endfunction
 
 
 function! s:isBrackets(pat)
-    for c in s:patlist
-        if a:pat ==# c
-            return 1
-        endif
-    endfor
+    " for c in s:patlist
+        " if a:pat ==# c
+            " return 1
+        " endif
+    " endfor
+    if has_key(s:patmap, a:pat)
+        return 1
+    endif
     redraw
     echohl WarningMsg
         echo "   ❖  不支援字元".a:pat." ❖ "
@@ -45,8 +36,8 @@ function! s:isInSurround(pat)
         let nofound = 1
     endif
     let leftcol=col(".")
-    execute "normal f".s:mapBrackets(a:pat)
-    if matchstr(getline('.'), '\%' . col('.') . 'c.') !=# s:mapBrackets(a:pat)
+    execute "normal f".s:getBracketsMap(a:pat)
+    if matchstr(getline('.'), '\%' . col('.') . 'c.') !=# s:getBracketsMap(a:pat)
         let nofound = 1
     endif
     let rightcol=col(".")
@@ -55,7 +46,7 @@ function! s:isInSurround(pat)
     endif
     redraw
     echohl WarningMsg
-        echo "   ❖  沒有在".a:pat.s:mapBrackets(a:pat)."裡喔 ❖ "
+        echo "   ❖  沒有在".a:pat.s:getBracketsMap(a:pat)."裡喔 ❖ "
     echohl NONE
     " recover sorcur position
     execute "normal 0".(s:nowcol)."lh"
@@ -85,11 +76,11 @@ function! s:surround(num, pat)
     for i in range(a:num)
         execute "normal e"
     endfor
-    execute "normal a".s:mapBrackets(a:pat)
+    execute "normal a".s:getBracketsMap(a:pat)
     call s:restoreMap(a:pat)
     redraw
     echohl WarningMsg
-        echo "   ❖  加入".a:pat.s:mapBrackets(a:pat)." ❖ "
+        echo "   ❖  加入".a:pat.s:getBracketsMap(a:pat)." ❖ "
     echohl NONE
 endfunction
 
@@ -114,18 +105,18 @@ function! s:surroundVadd(vmode)
     call s:saveMap(pat)
     if a:vmode ==# 'v'
         execute "normal gvO\<ESC> hi".pat
-        execute "normal gvO\<ESC> a".s:mapBrackets(pat)."\<ESC>"
+        execute "normal gvO\<ESC> a".s:getBracketsMap(pat)."\<ESC>"
     elseif a:vmode ==# 'V'
         execute "normal gvO\<ESC> I".pat
-        execute "normal gvO\<ESC> A".s:mapBrackets(pat)."\<ESC>"
+        execute "normal gvO\<ESC> A".s:getBracketsMap(pat)."\<ESC>"
     else
         execute "normal gvOI".pat
-        execute "normal gvlOlA".s:mapBrackets(pat)."\<ESC>"
+        execute "normal gvlOlA".s:getBracketsMap(pat)."\<ESC>"
     endif
     call s:restoreMap(pat)
     redraw
     echohl WarningMsg
-        echo "   ❖  加入".pat.s:mapBrackets(pat)." ❖ "
+        echo "   ❖  加入".pat.s:getBracketsMap(pat)." ❖ "
     echohl NONE
     " recover sorcur position
     execute "normal 0".(s:nowcol)."lhf".pat
@@ -142,13 +133,13 @@ function! s:surroundNdel()
         return
     endif
     " delete
-    execute "normal F".pat."xf".s:mapBrackets(pat)."x"
+    execute "normal F".pat."xf".s:getBracketsMap(pat)."x"
     " recover sorcur position
     execute "normal 0".(s:nowcol)."lhh"
     redraw
     echohl WarningMsg
        "  echo s:nowcol." ".leftcol." ".rightcol
-        echo "   ❖  刪除".pat.s:mapBrackets(pat)." ❖ "
+        echo "   ❖  刪除".pat.s:getBracketsMap(pat)." ❖ "
     echohl NONE
 endfunction
 
@@ -167,12 +158,12 @@ function! s:surroundNrep()
         return
     endif
     " replace
-    execute "normal F".pat1."r".pat2."f".s:mapBrackets(pat1)."r".s:mapBrackets(pat2)
+    execute "normal F".pat1."r".pat2."f".s:getBracketsMap(pat1)."r".s:getBracketsMap(pat2)
     " recover sorcur position
     execute "normal 0".(s:nowcol)."lh"
     echohl WarningMsg
        "  echo s:nowcol." ".leftcol." ".rightcol
-        echo "   ❖  取代".pat1.s:mapBrackets(pat1)."為".pat2.s:mapBrackets(pat2)." ❖ "
+        echo "   ❖  取代".pat1.s:getBracketsMap(pat1)."為".pat2.s:getBracketsMap(pat2)." ❖ "
     echohl NONE
 endfunction
 
