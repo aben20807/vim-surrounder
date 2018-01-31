@@ -16,11 +16,14 @@
 + '', "", (), [], {}, <>
 
 ### 2.b. Demonstration
-+ Note: ==▇== marked text is cursor position.
-+ h==e==llo world   --> `<leader>s "`   -->  "h==e==llo" world
-+ h==e==llo world   --> `2<leader>s "`  --> "h==e==llo world"
-+ "h==e==llo world" --> `<leader>d "`   -->  h==e==llo world
-+ "h==e==llo world" --> `<leader>f "(`  --> (h==e==llo world)
++ Note: ` ` marked text is cursor position.
+
+|Before|key pressed|After|
+|:-:|:-:|:-:|
+|h`e`llo world   | `<leader>s "`   |  "h`e`llo" world|
+|h`e`llo world   | `2<leader>s "`  | "h`e`llo world"|
+|"h`e`llo world" | `<leader>d "`   |  h`e`llo world|
+|"h`e`llo world" | `<leader>f "(`  | (h`e`llo world)|
 
 ### 2.c. Settings
 ```vim
