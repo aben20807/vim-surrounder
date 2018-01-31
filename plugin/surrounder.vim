@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-01-31 20:22:13
+" Last Modified: 2018-01-31 20:34:30
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -165,17 +165,6 @@ function! s:surroundNrep()
 endfunction
 
 
-command! -nargs=+ S call s:surround(<f-args>)
-" nnoremap <silent> <Plug>SurroundNadd :<C-u>call <SID>surroundNadd(v:count1)<CR>
-" vnoremap <silent> <Plug>SurroundVadd :<C-u>call <SID>surroundVadd(visualmode())<CR>
-" nmap <leader>s <Plug>SurroundNadd
-" vmap <leader>s <Plug>SurroundVadd
-"
-" nnoremap <silent> <Plug>SurroundNdel :<C-u>call <SID>surroundNdel()<CR>
-" nmap <leader>d <Plug>SurroundNdel
-"
-" nnoremap <silent> <Plug>SurroundNrep :<C-u>call <SID>surroundNrep()<CR>
-" nmap <leader>f <Plug>SurroundNrep
 " Function: s:initVariable() function
 " 初始化變數
 " Ref: https://github.com/scrooloose/nerdcommenter/blob/master/plugin/NERD_commenter.vim#L26
@@ -202,6 +191,7 @@ call s:initVariable("g:surrounder_n_rep_key", "<leader>f")
 
 
 " Section: key map設定
+command! -nargs=+ S call s:surround(<f-args>)
 function! s:setUpKeyMap()
     execute "nnoremap <silent> ".g:surrounder_n_add_key." :<C-u>call <SID>surroundNadd(v:count1)<CR>"
     execute "vnoremap <silent> ".g:surrounder_v_add_key." :<C-u>call <SID>surroundVadd(visualmode())<CR>"
