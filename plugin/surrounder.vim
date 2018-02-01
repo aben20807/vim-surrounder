@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-01-31 20:58:09
+" Last Modified: 2018-02-01 10:11:45
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -26,13 +26,13 @@ function! s:isInSurround(pat)
     let nofound = 0
     let b:curcol = col(".")
     let b:curline = line(".")
-    execute "normal F".a:pat
+    execute "normal! F".a:pat
     if matchstr(getline('.'), '\%' . col('.') . 'c.') !=# a:pat
         " Ref: https://stackoverflow.com/questions/23323747/vim-vimscript-get-exact-character-under-the-cursor
         let nofound = 1
     endif
     let leftcol=col(".")
-    execute "normal f".s:getBracketsMap(a:pat)
+    execute "normal! f".s:getBracketsMap(a:pat)
     if matchstr(getline('.'), '\%' . col('.') . 'c.') !=# s:getBracketsMap(a:pat)
         let nofound = 1
     endif
@@ -70,11 +70,11 @@ function! s:surround(num, pat)
     let b:curcol = col(".")
     let b:curline = line(".")
     call s:saveMap(a:pat)
-    execute "normal viw\<ESC> bi".a:pat
+    execute "normal! viw\<ESC> bi".a:pat
     for i in range(a:num)
-        execute "normal e"
+        execute "normal! e"
     endfor
-    execute "normal a".s:getBracketsMap(a:pat)
+    execute "normal! a".s:getBracketsMap(a:pat)
     call s:restoreMap(a:pat)
     redraw
     echohl WarningMsg
@@ -108,8 +108,8 @@ function! s:surroundVadd(vmode)
         execute "normal! `>a".s:getBracketsMap(pat)
         execute "normal! `<i".pat
     else
-        execute "normal gvOI".pat
-        execute "normal gvlOlA".s:getBracketsMap(pat)."\<ESC>"
+        execute "normal! gvOI".pat
+        execute "normal! gvlOlA".s:getBracketsMap(pat)."\<ESC>"
     endif
     call s:restoreMap(pat)
     redraw
@@ -130,7 +130,7 @@ function! s:surroundNdel()
         return
     endif
     " delete
-    execute "normal F".pat."xf".s:getBracketsMap(pat)."x"
+    execute "normal! F".pat."xf".s:getBracketsMap(pat)."x"
     redraw
     echohl WarningMsg
         echo "   ❖  刪除".pat.s:getBracketsMap(pat)." ❖ "
@@ -150,7 +150,7 @@ function! s:surroundNrep()
         return
     endif
     " replace
-    execute "normal F".pat1."r".pat2."f".s:getBracketsMap(pat1)."r".s:getBracketsMap(pat2)
+    execute "normal! F".pat1."r".pat2."f".s:getBracketsMap(pat1)."r".s:getBracketsMap(pat2)
     redraw
     echohl WarningMsg
         echo "   ❖  取代".pat1.s:getBracketsMap(pat1)."為".pat2.s:getBracketsMap(pat2)." ❖ "
