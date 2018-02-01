@@ -39,6 +39,9 @@ let g:surrounder_n_del_key = "<leader>d"
 
 " Replace surround in n mode
 let g:surrounder_n_rep_key = "<leader>f"
+
+" Show the surround information by default.
+let g:surrounder_show_info = 1
 ```
 
 ![img](https://imgur.com/DR5QWxl.png)
