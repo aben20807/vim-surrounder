@@ -1,9 +1,27 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-02-01 10:11:45
+" Last Modified: 2018-02-01 10:41:57
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
+
+
+" Function: s:show_info(str) function
+" 印出字串用
+"
+" Args:
+"   -str: 要印出的字串
+function! s:show_info(str)
+    if g:surrounder_show_info
+        redraw
+        echohl WarningMsg
+        echo a:str
+        echohl NONE
+    else
+        return
+    endif
+endfunction
+
 
 function! s:getBracketsMap(pat)
     return s:patmap[a:pat]
@@ -14,10 +32,7 @@ function! s:isBrackets(pat)
     if has_key(s:patmap, a:pat)
         return 1
     endif
-    redraw
-    echohl WarningMsg
-        echo "   ❖  不支援字元".a:pat." ❖ "
-    echohl NONE
+    call s:show_info("   ❖  不支援字元".a:pat." ❖ ")
     return 0
 endfunction
 
@@ -40,10 +55,7 @@ function! s:isInSurround(pat)
     if nofound ==# 0 && leftcol <= b:curcol && rightcol >= b:curcol && leftcol !=# rightcol
         return 1
     else
-        redraw
-        echohl WarningMsg
-            echo "   ❖  沒有在".a:pat.s:getBracketsMap(a:pat)."裡喔 ❖ "
-        echohl NONE
+        call s:show_info("   ❖  沒有在".a:pat.s:getBracketsMap(a:pat)."裡喔 ❖ ")
     endif
     " recover sorcur position
     call cursor(b:curline, b:curcol)
@@ -53,12 +65,12 @@ endfunction
 
 function! s:saveMap(pat)
     let s:save=maparg(a:pat, 'i')
-    execute 'inoremap ' . a:pat . ' ' . a:pat
+    execute 'inoremap ' . a:pat . ' ' . a:pat."\<CR>"
 endfunction
 
 
 function! s:restoreMap(pat)
-    execute 'inoremap ' . a:pat . ' ' . s:save
+    execute 'inoremap ' . a:pat . ' ' . s:save."\<CR>"
 endfunction
 
 
@@ -76,10 +88,7 @@ function! s:surround(num, pat)
     endfor
     execute "normal! a".s:getBracketsMap(a:pat)
     call s:restoreMap(a:pat)
-    redraw
-    echohl WarningMsg
-        echo "   ❖  加入".a:pat.s:getBracketsMap(a:pat)." ❖ "
-    echohl NONE
+    call s:show_info("   ❖  加入".a:pat.s:getBracketsMap(a:pat)." ❖ ")
     call cursor(b:curline, b:curcol + 1)
 endfunction
 
@@ -112,10 +121,7 @@ function! s:surroundVadd(vmode)
         execute "normal! gvlOlA".s:getBracketsMap(pat)."\<ESC>"
     endif
     call s:restoreMap(pat)
-    redraw
-    echohl WarningMsg
-        echo "   ❖  加入".pat.s:getBracketsMap(pat)." ❖ "
-    echohl NONE
+    call s:show_info("   ❖  加入".pat.s:getBracketsMap(pat)." ❖ ")
     " recover sorcur position
     call cursor(b:curline, b:curcol + 1)
 endfunction
@@ -131,10 +137,7 @@ function! s:surroundNdel()
     endif
     " delete
     execute "normal! F".pat."xf".s:getBracketsMap(pat)."x"
-    redraw
-    echohl WarningMsg
-        echo "   ❖  刪除".pat.s:getBracketsMap(pat)." ❖ "
-    echohl NONE
+    call s:show_info("   ❖  刪除".pat.s:getBracketsMap(pat)." ❖ ")
     " recover sorcur position
     call cursor(b:curline, b:curcol - 1)
 endfunction
@@ -151,10 +154,7 @@ function! s:surroundNrep()
     endif
     " replace
     execute "normal! F".pat1."r".pat2."f".s:getBracketsMap(pat1)."r".s:getBracketsMap(pat2)
-    redraw
-    echohl WarningMsg
-        echo "   ❖  取代".pat1.s:getBracketsMap(pat1)."為".pat2.s:getBracketsMap(pat2)." ❖ "
-    echohl NONE
+    call s:show_info("   ❖  取代".pat1.s:getBracketsMap(pat1)."為".pat2.s:getBracketsMap(pat2)." ❖ ")
     " recover sorcur position
     call cursor(b:curline, b:curcol)
 endfunction
@@ -183,6 +183,8 @@ call s:initVariable("g:surrounder_n_add_key", "<leader>s")
 call s:initVariable("g:surrounder_v_add_key", "<leader>s")
 call s:initVariable("g:surrounder_n_del_key", "<leader>d")
 call s:initVariable("g:surrounder_n_rep_key", "<leader>f")
+call s:initVariable("g:surrounder_show_info", 1)
+
 
 
 " Section: key map設定
