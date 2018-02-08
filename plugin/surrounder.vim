@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-02-08 17:00:42
+" Last Modified: 2018-02-08 17:10:17
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -165,12 +165,23 @@ endfunction
 
 
 function! s:SurroundNrep()
-    let pat1 = nr2char(getchar())
-    let pat2 = nr2char(getchar())
     let b:curcol = col(".")
     let b:curline = line(".")
-    " check is can be deleted
-    if s:IsBrackets(pat1) ==# 0 || s:IsBrackets(pat2) ==# 0 || s:IsInSurround(pat1, 0) ==# 0
+    if g:surrounder_auto_detect
+        let pat1 = s:CheckAllPat()
+        if pat1 ==# "0"
+            call s:ShowInfo("   ❖  沒有在任何符號裡喔 ❖ ")
+            return
+        endif
+    else
+        let pat1 = nr2char(getchar())
+        " check is can be deleted
+        if s:IsBrackets(pat1) ==# 0 || s:IsInSurround(pat1, 0) ==# 0
+            return
+        endif
+    endif
+    let pat2 = nr2char(getchar())
+    if s:IsBrackets(pat2) ==# 0
         return
     endif
     " replace
