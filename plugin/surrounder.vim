@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-02-01 10:41:57
+" Last Modified: 2018-02-08 11:49:15
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -179,11 +179,12 @@ endfunction
 
 
 " Section: variable initialization
-call s:initVariable("g:surrounder_n_add_key", "<leader>s")
-call s:initVariable("g:surrounder_v_add_key", "<leader>s")
-call s:initVariable("g:surrounder_n_del_key", "<leader>d")
-call s:initVariable("g:surrounder_n_rep_key", "<leader>f")
-call s:initVariable("g:surrounder_show_info", 1)
+call s:initVariable("g:surrounder_use_default_mapping", 1)
+call s:initVariable("g:surrounder_n_add_key",           "<leader>s")
+call s:initVariable("g:surrounder_v_add_key",           "<leader>s")
+call s:initVariable("g:surrounder_n_del_key",           "<leader>d")
+call s:initVariable("g:surrounder_n_rep_key",           "<leader>f")
+call s:initVariable("g:surrounder_show_info",           1)
 
 
 
@@ -195,4 +196,6 @@ function! s:setUpKeyMap()
     execute "nnoremap <silent> ".g:surrounder_n_del_key." :<C-u>call <SID>surroundNdel()<CR>"
     execute "nnoremap <silent> ".g:surrounder_n_rep_key." :<C-u>call <SID>surroundNrep()<CR>"
 endfunction
-call s:setUpKeyMap()
+if g:surrounder_use_default_mapping
+    call s:setUpKeyMap()
+endif

@@ -28,6 +28,9 @@
 ### 2.c. Settings
 ```vim
 " Feel free to change mapping you like.
+" Use key mappings setting from this plugin by default.
+let g:surrounder_use_default_mapping = 1
+
 " Add surround in n mode
 let g:surrounder_n_add_key = "<leader>s"
 
