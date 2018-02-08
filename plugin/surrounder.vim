@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-02-08 17:10:17
+" Last Modified: 2018-02-08 17:18:43
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -69,7 +69,7 @@ function s:CheckAllPat()
     let l:patkeys = keys(s:patmap)
     for i in range(len(l:patkeys))
         if s:IsInSurround(l:patkeys[i], 1) ==# 1
-            call s:ShowInfo("   ❖  ".l:patkeys[i]." ❖ ")
+            call s:ShowInfo("   ❖  偵測到".l:patkeys[i].s:GetBracketsMap(l:patkeys[i])." ❖ ")
             return l:patkeys[i]
         endif
     endfor
@@ -108,6 +108,10 @@ endfunction
 
 function! s:SurroundNadd(num)
     let pat = nr2char(getchar())
+    if pat ==? "\<ESC>"
+        call s:ShowInfo("   ❖  取消 ❖ ")
+        return
+    endif
     call s:Surround(a:num, pat)
 endfunction
 
@@ -115,6 +119,10 @@ endfunction
 function! s:SurroundVadd(vmode)
     " Ref: https://stackoverflow.com/questions/29091614/vim-determine-if-function-called-from-visual-block-mode
     let pat = nr2char(getchar())
+    if pat ==? "\<ESC>"
+        call s:ShowInfo("   ❖  取消 ❖ ")
+        return
+    endif
     let b:curcol = col(".")
     let b:curline = line(".")
     " check is can be added
@@ -151,6 +159,10 @@ function! s:SurroundNdel()
         endif
     else
         let pat = nr2char(getchar())
+        if pat ==? "\<ESC>"
+            call s:ShowInfo("   ❖  取消 ❖ ")
+            return
+        endif
         " check is can be deleted
         if s:IsBrackets(pat) ==# 0 || s:IsInSurround(pat, 0) ==# 0
             return
@@ -175,12 +187,20 @@ function! s:SurroundNrep()
         endif
     else
         let pat1 = nr2char(getchar())
+        if pat1 ==? "\<ESC>"
+            call s:ShowInfo("   ❖  取消 ❖ ")
+            return
+        endif
         " check is can be deleted
         if s:IsBrackets(pat1) ==# 0 || s:IsInSurround(pat1, 0) ==# 0
             return
         endif
     endif
     let pat2 = nr2char(getchar())
+    if pat2 ==? "\<ESC>"
+        call s:ShowInfo("   ❖  取消 ❖ ")
+        return
+    endif
     if s:IsBrackets(pat2) ==# 0
         return
     endif
