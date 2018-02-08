@@ -24,12 +24,14 @@
 |h`e`llo world   | `2<leader>s "`  | "h`e`llo world"|
 
 + Use auto detect
+
 |Before|key pressed|After|
 |:-:|:-:|:-:|
 |"h`e`llo world" | `<leader>d`     |  h`e`llo world|
 |"h`e`llo world" | `<leader>f (`   | (h`e`llo world)|
 
 + Not use auto detect
+
 |Before|key pressed|After|
 |:-:|:-:|:-:|
 |"h`e`llo world" | `<leader>d "`   |  h`e`llo world|
