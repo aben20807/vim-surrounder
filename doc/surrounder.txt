@@ -25,6 +25,7 @@ CONTENTS                                                  *surrounder-contents*
   3.4 g:surrounder_n_del_key ......... |config_surrounder_n_del_key|
   3.5 g:surrounder_n_rep_key ......... |config_surrounder_n_rep_key|
   3.6 g:surrounder_show_info ......... |config_surrounder_show_info|
+  3.7 g:surrounder_auto_detect = 1 ... |config_surrounder_auto_detect|
  4. License .......................... |surrounder_license|
  5. Bugs ............................. |surrounder_bugs|
 
@@ -46,16 +47,27 @@ e.g. h|ello world --> 2<leader>s " --> "h|ello world"
       ^                                  ^
       └───────── this is cursor ─────────┘
 
-A: Deletion, press <leader>d
+A: Deletion with using auto detect, just press <leader>d.
+e.g. "h|ello world" --> <leader>d --> h|ello world
+       ^                               ^
+       └──────── this is cursor ───────┘
+
+A: Deletion with not using auto detect, press <leader>d and a symbol.
 e.g. "h|ello world" --> <leader>d " --> h|ello world
        ^                                 ^
-       └───────── this is cursor ────────┘
+       └──────── this is cursor ─────────┘
 
-A: Relpacement, press <leader>f and press two symbols, first is the one you want
-to replace, second is the one you want to use.
+A: Relpacement with using auto detect, press <leader>f and a symbol
+which you want to use.
+e.g. "h|ello world" --> <leader>f ( --> (h|ello world)
+       ^                                  ^
+       └──────── this is cursor ──────────┘
+
+A: Relpacement with not using auto detect, press <leader>f and two symbols,
+first is the one you want to replace, second is the one you want to use.
 e.g. "h|ello world" --> <leader>f "( --> (h|ello world)
        ^                                   ^
-       └───────── this is cursor ──────────┘
+       └──────── this is cursor ───────────┘
 
 ==============================================================================
 2. Mappings                                              *surrounder_mappings*
@@ -146,6 +158,15 @@ Set this to 0 to not show surround info like screenshot ❖  加入"" ❖. >
 <
 
 Default: 1 (show info)
+
+------------------------------------------------------------------------------
+3.7 g:surrounder_auto_detect                   *config_surrounder_auto_detect*
+
+Set this to 0 to not use auto detect surround symbols. >
+    let g:surrounder_auto_detect = 0
+<
+
+Default: 1 (use auto detect)
 
 ==============================================================================
 4. License                                                *surrounder_license*

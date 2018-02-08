@@ -22,6 +22,16 @@
 |:-:|:-:|:-:|
 |h`e`llo world   | `<leader>s "`   |  "h`e`llo" world|
 |h`e`llo world   | `2<leader>s "`  | "h`e`llo world"|
+
++ Use auto detect
+|Before|key pressed|After|
+|:-:|:-:|:-:|
+|"h`e`llo world" | `<leader>d`     |  h`e`llo world|
+|"h`e`llo world" | `<leader>f (`   | (h`e`llo world)|
+
++ Not use auto detect
+|Before|key pressed|After|
+|:-:|:-:|:-:|
 |"h`e`llo world" | `<leader>d "`   |  h`e`llo world|
 |"h`e`llo world" | `<leader>f "(`  | (h`e`llo world)|
 
@@ -45,6 +55,9 @@ let g:surrounder_n_rep_key = "<leader>f"
 
 " Show the surround information by default.
 let g:surrounder_show_info = 1
+
+" Auto detect if in surround symbols by default.
+let g:surrounder_auto_detect = 1
 ```
 
 ![img](https://imgur.com/DR5QWxl.png)
