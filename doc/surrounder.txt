@@ -31,20 +31,68 @@ CONTENTS                                                  *surrounder-contents*
 ==============================================================================
 1. Usage                                                    *surrounder_usage*
 
+Supported symbols: '', "", (), [], {}, <>
+In normal mode you can do add, delete, replace surround symbols.
+You also can add symbols in visual mode.
+
+Q: How to use?
+A: Just press <leader>s and press a symbol then it will be add.
+e.g. h|ello world --> <leader>s " --> "h|ello" world
+      ^                                 ^
+      └───────── this is cursor ────────┘
+
+A: Press a number before pressing add key.
+e.g. h|ello world --> 2<leader>s " --> "h|ello world"
+      ^                                  ^
+      └───────── this is cursor ─────────┘
+
+A: Deletion, press <leader>d
+e.g. "h|ello world" --> <leader>d " --> h|ello world
+       ^                                 ^
+       └───────── this is cursor ────────┘
+
+A: Relpacement, press <leader>f and press two symbols, first is the one you want
+to replace, second is the one you want to use.
+e.g. "h|ello world" --> <leader>f "( --> (h|ello world)
+       ^                                   ^
+       └───────── this is cursor ──────────┘
+
 ==============================================================================
 2. Mappings                                              *surrounder_mappings*
+
+There four key mappings by default for your convenience.
 
 ------------------------------------------------------------------------------
 2.1 g:surrounder_n_add_key                      *mapping_surrounder_n_add_key*
 
+Bound to: <leader>s
+
+Need to press a symbol after pressing this key.
+Press <leader>s and a symbol it will add surround symbols.
+Also word with number prefix.
+
 ------------------------------------------------------------------------------
 2.2 g:surrounder_v_add_key                      *mapping_surrounder_v_add_key*
+
+Bound to: <leader>s
+
+Need to press a symbol after pressing this key.
+You can use visual mode to select word(s) you want to surround, then press
+<leader>s and a symbol.
 
 ------------------------------------------------------------------------------
 2.3 g:surrounder_n_del_key                      *mapping_surrounder_n_del_key*
 
+Bound to: <leader>d
+
+Need to press a symbol after pressing this key.
+
 ------------------------------------------------------------------------------
 2.4 g:surrounder_n_rep_key                      *mapping_surrounder_n_rep_key*
+
+Bound to: <leader>p
+
+Need to press two symbols after pressing this key.
 
 ==============================================================================
 3. Configuration                                    *surrounder_configuration*
@@ -52,23 +100,57 @@ CONTENTS                                                  *surrounder-contents*
 ------------------------------------------------------------------------------
 3.1 g:surrounder_use_default_mapping   *config_surrounder_use_default_mapping*
 
+Set this to 0 to not use default mappings. >
+    let g:surrounder_use_default_mapping = 0
+<
+
+Default: 1 (Enable default mappings)
+
 ------------------------------------------------------------------------------
 3.2 g:surrounder_n_add_key                       *config_surrounder_n_add_key*
+
+You can set it to Ctrl+s >
+    let g:surrounder_n_add_key = "<C-s>"
+<
+
+Default: "<leader>s"
 
 ------------------------------------------------------------------------------
 3.3 g:surrounder_v_add_key                       *config_surrounder_v_add_key*
 
+Same as 3.2
+
 ------------------------------------------------------------------------------
 3.4 g:surrounder_n_del_key                       *config_surrounder_n_del_key*
+
+You can set it to Ctrl+d >
+    let g:surrounder_n_del_key = "<C-d>"
+<
+
+Default: "<leader>d"
 
 ------------------------------------------------------------------------------
 3.5 g:surrounder_n_rep_key                       *config_surrounder_n_rep_key*
 
+You can set it to Ctrl+f >
+    let g:surrounder_n_rep_key = "<C-f>"
+<
+
+Default: "<leader>f"
+
 ------------------------------------------------------------------------------
 3.6 g:surrounder_show_info                       *config_surrounder_show_info*
 
+Set this to 0 to not show surround info like screenshot ❖  加入"" ❖. >
+    let g:surrounder_show_info = 0
+<
+
+Default: 1 (show info)
+
 ==============================================================================
 4. License                                                *surrounder_license*
+
+vim-surrounder is MIT licensed.
 
 ==============================================================================
 5. Bugs                                                      *surrounder_bugs*
