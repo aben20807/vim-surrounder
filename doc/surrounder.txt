@@ -1,0 +1,76 @@
+*surrounder.txt*   easily surround code.
+*surrounder* *vim-surrounder*
+
+                                                    _                        ~
+                                                   | |                       ~
+          ___ _   _  ____ ____ ___  _   _ ____   __| |_____  ____            ~
+         /___) | | |/ ___) ___) _ \| | | |  _ \ / _  | ___ |/ ___)           ~
+        |___ | |_| | |  | |  | |_| | |_| | | | ( (_| | ____| |               ~
+        (___/|____/|_|  |_|   \___/|____/|_| |_|\____|_____)_|               ~
+                                                                             ~
+           A simple Vim plugin which to add surround symbols.
+
+==============================================================================
+CONTENTS                                                  *surrounder-contents*
+ 1. Usage ............................ |surrounder_usage|
+ 2. Mappings ......................... |surrounder_mappings|
+  2.1 g:surrounder_n_add_key  ........ |mapping_surrounder_n_add_key|
+  2.2 g:surrounder_v_add_key  ........ |mapping_surrounder_v_add_key|
+  2.3 g:surrounder_n_del_key  ........ |mapping_surrounder_n_del_key|
+  2.4 g:surrounder_n_rep_key   ....... |mapping_surrounder_n_rep_key|
+ 3. Configuration .................... |surrounder_configuration|
+  3.1 g:surrounder_use_default_mapping |config_surrounder_use_default_mapping|
+  3.2 g:surrounder_n_add_key ......... |config_surrounder_n_add_key|
+  3.3 g:surrounder_v_add_key ......... |config_surrounder_v_add_key|
+  3.4 g:surrounder_n_del_key ......... |config_surrounder_n_del_key|
+  3.5 g:surrounder_n_rep_key ......... |config_surrounder_n_rep_key|
+  3.6 g:surrounder_show_info ......... |config_surrounder_show_info|
+ 4. License .......................... |surrounder_license|
+ 5. Bugs ............................. |surrounder_bugs|
+
+==============================================================================
+1. Usage                                                    *surrounder_usage*
+
+==============================================================================
+2. Mappings                                              *surrounder_mappings*
+
+------------------------------------------------------------------------------
+2.1 g:surrounder_n_add_key                      *mapping_surrounder_n_add_key*
+
+------------------------------------------------------------------------------
+2.2 g:surrounder_v_add_key                      *mapping_surrounder_v_add_key*
+
+------------------------------------------------------------------------------
+2.3 g:surrounder_n_del_key                      *mapping_surrounder_n_del_key*
+
+------------------------------------------------------------------------------
+2.4 g:surrounder_n_rep_key                      *mapping_surrounder_n_rep_key*
+
+==============================================================================
+3. Configuration                                    *surrounder_configuration*
+
+------------------------------------------------------------------------------
+3.1 g:surrounder_use_default_mapping   *config_surrounder_use_default_mapping*
+
+------------------------------------------------------------------------------
+3.2 g:surrounder_n_add_key                       *config_surrounder_n_add_key*
+
+------------------------------------------------------------------------------
+3.3 g:surrounder_v_add_key                       *config_surrounder_v_add_key*
+
+------------------------------------------------------------------------------
+3.4 g:surrounder_n_del_key                       *config_surrounder_n_del_key*
+
+------------------------------------------------------------------------------
+3.5 g:surrounder_n_rep_key                       *config_surrounder_n_rep_key*
+
+------------------------------------------------------------------------------
+3.6 g:surrounder_show_info                       *config_surrounder_show_info*
+
+==============================================================================
+4. License                                                *surrounder_license*
+
+==============================================================================
+5. Bugs                                                      *surrounder_bugs*
+
+==============================================================================
