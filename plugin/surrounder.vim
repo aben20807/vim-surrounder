@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-02-08 16:24:56
+" Last Modified: 2018-02-08 17:00:42
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -37,7 +37,7 @@ function! s:IsBrackets(pat)
 endfunction
 
 
-function! s:IsInSurround(pat)
+function! s:IsInSurround(pat, is_foreach)
     let nofound = 0
     let b:curcol = col(".")
     let b:curline = line(".")
@@ -55,11 +55,25 @@ function! s:IsInSurround(pat)
     if nofound ==# 0 && leftcol <= b:curcol && rightcol >= b:curcol && leftcol !=# rightcol
         return 1
     else
-        call s:ShowInfo("   ❖  沒有在".a:pat.s:GetBracketsMap(a:pat)."裡喔 ❖ ")
+        if !a:is_foreach
+            call s:ShowInfo("   ❖  沒有在".a:pat.s:GetBracketsMap(a:pat)."裡喔 ❖ ")
+        endif
     endif
     " recover sorcur position
     call cursor(b:curline, b:curcol)
     return 0
+endfunction
+
+
+function s:CheckAllPat()
+    let l:patkeys = keys(s:patmap)
+    for i in range(len(l:patkeys))
+        if s:IsInSurround(l:patkeys[i], 1) ==# 1
+            call s:ShowInfo("   ❖  ".l:patkeys[i]." ❖ ")
+            return l:patkeys[i]
+        endif
+    endfor
+    return "0"
 endfunction
 
 
@@ -127,12 +141,20 @@ endfunction
 
 
 function! s:SurroundNdel()
-    let pat = nr2char(getchar())
     let b:curcol = col(".")
     let b:curline = line(".")
-    " check is can be deleted
-    if s:IsBrackets(pat) ==# 0 || s:IsInSurround(pat) ==# 0
-        return
+    if g:surrounder_auto_detect
+        let pat = s:CheckAllPat()
+        if pat ==# "0"
+            call s:ShowInfo("   ❖  沒有在任何符號裡喔 ❖ ")
+            return
+        endif
+    else
+        let pat = nr2char(getchar())
+        " check is can be deleted
+        if s:IsBrackets(pat) ==# 0 || s:IsInSurround(pat, 0) ==# 0
+            return
+        endif
     endif
     " delete
     execute "normal! F".pat."xf".s:GetBracketsMap(pat)."x"
@@ -148,7 +170,7 @@ function! s:SurroundNrep()
     let b:curcol = col(".")
     let b:curline = line(".")
     " check is can be deleted
-    if s:IsBrackets(pat1) ==# 0 || s:IsBrackets(pat2) ==# 0 || s:IsInSurround(pat1) ==# 0
+    if s:IsBrackets(pat1) ==# 0 || s:IsBrackets(pat2) ==# 0 || s:IsInSurround(pat1, 0) ==# 0
         return
     endif
     " replace
@@ -184,6 +206,8 @@ call s:InitVariable("g:surrounder_v_add_key",           "<leader>s")
 call s:InitVariable("g:surrounder_n_del_key",           "<leader>d")
 call s:InitVariable("g:surrounder_n_rep_key",           "<leader>f")
 call s:InitVariable("g:surrounder_show_info",           1)
+call s:InitVariable("g:surrounder_auto_detect",         1)
+
 
 
 
@@ -197,4 +221,5 @@ function! s:SetUpKeyMap()
 endfunction
 if g:surrounder_use_default_mapping
     call s:SetUpKeyMap()
+    call s:CheckAllPat()
 endif
