@@ -65,7 +65,7 @@ function! s:IsInSurround(pat, is_foreach)
 endfunction
 
 
-function s:CheckAllPat()
+function! s:CheckAllPat()
     let l:patkeys = keys(s:patmap)
     for i in range(len(l:patkeys))
         if s:IsInSurround(l:patkeys[i], 1) ==# 1
