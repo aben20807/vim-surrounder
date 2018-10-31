@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: surrounder.vim
-" Last Modified: 2018-04-05 17:42:08
+" Last Modified: 2018-11-01 08:57:44
 " Vim: enc=utf-8
 
 let s:patmap={"'": "'", '"': '"', '(': ')', '[': ']', '{': '}', '<': '>'}
@@ -83,11 +83,17 @@ endfunction
 
 function! surrounder#SaveMap(pat) abort
     let s:save=maparg(a:pat, 'i')
+    if s:save ==# ''
+        return
+    endif
     execute 'inoremap ' . a:pat . ' ' . a:pat."\<CR>"
 endfunction
 
 
 function! surrounder#RestoreMap(pat) abort
+    if s:save ==# ''
+        return
+    endif
     execute 'inoremap ' . a:pat . ' ' . s:save."\<CR>"
 endfunction
 
